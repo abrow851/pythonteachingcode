@@ -19,3 +19,32 @@ The projects included here include working code for you to run and customize. So
 > This project requires that you install the flask module. After that, when you run it, it will create a web server on your machine and host your Python and HTML files in dynamic web pages. This demo will not run in a web browser or Jupyter code editor, because those editors do not have access to the operating system properties of your computer. You need to run it in Visual Studio Code or another method directly on your computer for it to work.
 7. Data Analytics with Jupyter and Pandas
 > COMING SOON
+
+
+import sqlite3
+
+# connect (creates file if not exists)
+conn = sqlite3.connect("students.db")
+cursor = conn.cursor()
+
+# create table
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS students (
+    id INTEGER PRIMARY KEY,
+    name TEXT,
+    grade INTEGER
+)
+""")
+
+# insert data
+cursor.execute("INSERT INTO students (name, grade) VALUES (?, ?)", ("Alice", 90))
+
+# read data
+cursor.execute("SELECT * FROM students")
+rows = cursor.fetchall()
+
+for row in rows:
+    print(row)
+
+conn.commit()
+conn.close()
