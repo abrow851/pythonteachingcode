@@ -20,31 +20,45 @@ The projects included here include working code for you to run and customize. So
 7. Data Analytics with Jupyter and Pandas
 > COMING SOON
 
-
 import sqlite3
 
-# connect (creates file if not exists)
-conn = sqlite3.connect("students.db")
+# connect to DB
+conn = sqlite3.connect("smartstudy.db")
 cursor = conn.cursor()
 
 # create table
 cursor.execute("""
-CREATE TABLE IF NOT EXISTS students (
+CREATE TABLE IF NOT EXISTS tasks (
     id INTEGER PRIMARY KEY,
-    name TEXT,
-    grade INTEGER
+    title TEXT,
+    due_date TEXT,
+    completed INTEGER
 )
 """)
 
-# insert data
-cursor.execute("INSERT INTO students (name, grade) VALUES (?, ?)", ("Alice", 90))
+# function to add task
+def add_task(title, due_date):
+    cursor.execute(
+        "INSERT INTO tasks (title, due_date, completed) VALUES (?, ?, ?)",
+        (title, due_date, 0)
+    )
+    conn.commit()
 
-# read data
-cursor.execute("SELECT * FROM students")
-rows = cursor.fetchall()
+# function to view tasks
+def view_tasks():
+    cursor.execute("SELECT * FROM tasks")
+    return cursor.fetchall()
 
-for row in rows:
-    print(row)
 
-conn.commit()
-conn.close()
+
+    Example
+# add a task
+add_task("Study Biology Chapter 1", "2026-04-30")
+
+# show tasks
+print(view_tasks())
+
+# summarize notes and save
+notes = "Photosynthesis is how plants convert sunlight into energy."
+print(summarize_and_save(notes))
+    
